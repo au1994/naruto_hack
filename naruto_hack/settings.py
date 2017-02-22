@@ -74,6 +74,34 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'post_verbose': {
+            'format': '%(levelname)s %(asctime)s %(process)d %(funcName)s %(lineno)d %(message)s'
+        },
+
+    },
+    'handlers': {
+        'oms_debug_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'race_condition.log',
+            'when': "d",
+            "interval": 1,
+            'backupCount': 2,
+            'formatter': 'post_verbose'
+        },
+    },
+    'loggers': {
+        'crm_info_logger': {
+            'level': 'INFO',
+            'handlers': ['oms_debug_log_file'],
+            'propagate': True
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
