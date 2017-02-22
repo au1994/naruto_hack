@@ -2,6 +2,7 @@ from django.views.generic import View
 from django.http import Http404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+crm_info_logger = logging.getLogger('crm_info_logger')
 
 class OrderList(View):
 
@@ -10,7 +11,7 @@ class OrderList(View):
 
         try:
             body = request.body
-            print body
+            crm_info_logger.info(str(body))
         except Exception as e:
             print e
 
