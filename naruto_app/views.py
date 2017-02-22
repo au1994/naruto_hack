@@ -124,7 +124,7 @@ class OrderList(View):
                     list_at_present.append(node_at_present)
                 total_dist = apply_tsp(my_set)
                 dist_at_present = get_present_distance(list_at_present)
-                crm_info_logger.info("order:" + str(order) + "total_dist: " + total_dist + "dist_at_present" + dist_at_present)
+                crm_info_logger.info("order:" + str(order) + "total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
 
         except Exception as e:
             print e
