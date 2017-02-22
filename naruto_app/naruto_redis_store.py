@@ -6,7 +6,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 def set_item_node_mapping():
-    ftmp = open('ftmp', 'w')
+    r.delete('item_node_mapping')
     f = open('final_answer', 'r')
     item_node_mapping = f.read()
     item_node_mapping = json.dumps(json.loads(item_node_mapping))
