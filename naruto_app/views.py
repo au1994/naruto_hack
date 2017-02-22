@@ -66,7 +66,7 @@ def apply_tsp(set):
 def get_node_from_redis(product_id):
     product_id = str(product_id)
     item_node_mapping = get_item_node_mapping()
-    node = int(item_node_mapping.get(product_id))
+    node = int(item_node_mapping.get(product_id, 0))
     return node
 
 
@@ -110,7 +110,7 @@ class OrderList(View):
             body = request.body
             crm_info_logger.info(str(body))
             order = body.get('order_id')
-            if order.get('actual_merchant', {}).get('id') == 25801:
+            if body.get('order', {}).get('actual_merchant', {}).get('id') == 25811:
                 items = body.get('order').get('items')
                 my_set = set([])
                 list_at_present = []
