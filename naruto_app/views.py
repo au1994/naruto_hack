@@ -85,7 +85,7 @@ def get_item_location(item_code):
     data = response.get("data")
     results = data.get("results")
     for result in results:
-        warehouse = result.get("warehouse")
+        warehouse = result.get("warehouse").get("city")
         if str(warehouse) == 'Bangalore':
             return str(result.get("location").get("location_name"))
 
