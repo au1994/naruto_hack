@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.http import Http404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+import logging
 
 crm_info_logger = logging.getLogger('crm_info_logger')
 
