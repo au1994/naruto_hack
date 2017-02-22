@@ -5,6 +5,7 @@ import logging
 
 crm_info_logger = logging.getLogger('crm_info_logger')
 
+
 class OrderList(View):
 
     @csrf_exempt
