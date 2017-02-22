@@ -110,21 +110,19 @@ class OrderList(View):
             body = request.body
             crm_info_logger.info(str(body))
             order = body.get('order_id')
-            order_to_consider = GrOrder.objects.get(id=order)
-            if order_to_consider.actual_merchant_id == 25801:
+            if order.get('actual_merchant', {}).get('id') == 25801:
                 items = body.get('order').get('items')
-                set = {}
+                my_set = set([])
                 list_at_present = []
                 for item in items:
-                    mapping_id = item.get("mapping_id")
-                    product_id = GrMerchantProductMapping.objects.get(id=mapping_id).product_id
-                    item_code = get_item_code()
+                    product_id = item.get("product_id")
+                    item_code = get_item_code(product_id)
                     location = get_item_location(item_code)
                     node_at_present = convert_location_into_node(location)
                     node = get_node_from_redis(product_id)
-                    set.add(node)
+                    my_set.add(node)
                     list_at_present.append(node_at_present)
-                total_dist = apply_tsp(set)
+                total_dist = apply_tsp(my_set)
                 dist_at_present = get_present_distance(list_at_present)
                 crm_info_logger.info("order:" + str(order) + "total_dist: " + total_dist + "dist_at_present" + dist_at_present)
 
