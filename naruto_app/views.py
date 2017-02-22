@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import logging
 import requests
-import naruto_redis_store
+from naruto_redis_store import *
 
 crm_info_logger = logging.getLogger('crm_info_logger')
 
@@ -19,7 +19,7 @@ def tsp_rec_solve(start=0, intermediate_points={1, 2, 3}):
 
         # assert c not in ts (for debugging)
         if ts:
-            int(get_distance_between_two_nodes(lc, c))
+            # int(get_distance_between_two_nodes(lc, c))
             return min((int(get_distance_between_two_nodes(lc, c)) + rec_tsp_solve(lc, ts - {lc})[0], lc)
                        for lc in ts)
         else:
