@@ -126,6 +126,20 @@ def my_func(items):
     return total_dist, dist_at_present
 
 
+def two_dimension_from_single_node(node):
+    node = int(node)
+    if node == 0:
+        return 0,0
+
+    node = (node % 1200)
+    if node == 0:
+        node = 1200
+    row = (node-1)/40 + 1
+    column = node % 40
+    if column == 0:
+        column = 40
+    return int(row), int(column)
+
 
 class OrderList(View):
 
@@ -150,6 +164,7 @@ class OrderList(View):
                     list_at_present.append(node_at_present)
                 total_dist = apply_tsp(my_set)
                 dist_at_present = get_present_distance(list_at_present)
+
                 crm_info_logger.info("total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
 
         except Exception as e:
