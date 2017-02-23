@@ -100,7 +100,7 @@ def parse_file():
         f2.write(words[0] + "," + words[1] + ',')
         words.pop(0)
         words.pop(0)
-        a, b = func(words)
+        a, b = my_func(words)
         print str(a) + str(b)
         f2.write(str(a) + "," + str(b))
         f2.write('\n')
@@ -109,7 +109,7 @@ def parse_file():
     return
 
 
-def func(items):
+def my_func(items):
     my_set = set([])
     list_at_present = []
     for item in items:
