@@ -15,32 +15,16 @@ def convert_location_into_node(location):
 
 
 def tsp_rec_solve(start=0, intermediate_points={1, 2, 3}):
-    def rec_tsp_solve(c, ts):
-
-        # assert c not in ts (for debugging)
-        if ts:
-            # int(get_distance_between_two_nodes(lc, c))
-            return min((int(get_distance_between_two_nodes(lc, c)) + rec_tsp_solve(lc, ts - {lc})[0], lc)
-                       for lc in ts)
-        else:
-            return int(get_distance_between_two_nodes(0, c)), 0
-
-
-    best_tour = []
-    start_dup = start
-    # cs = set(range(1, len(d)))
-    while True:
-        l, lc = rec_tsp_solve(start, intermediate_points)
-        if lc == 0:
-            break
-        best_tour.append(lc)
-        start = lc
-        intermediate_points = intermediate_points - {lc}
-
-    best_tour = tuple(reversed(best_tour))
-
-    print best_tour
-    return best_tour
+    points = list(intermediate_points)
+    if start is None:
+        start = points[0]
+    must_visit = points
+    path = [start]
+    while must_visit:
+        nearest = min(must_visit, key=lambda x: int(get_distance_between_two_nodes(path[-1], x)))
+        path.append(nearest)
+        must_visit.remove(nearest)
+    return path
 
 
 def calculate_cost_of_best_tour(start, best_tour):
