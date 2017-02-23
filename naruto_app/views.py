@@ -48,7 +48,7 @@ def apply_tsp(set):
     best_tour = tsp_rec_solve(0, set)
     dist = calculate_cost_of_best_tour(0, best_tour)
 
-    return dist
+    return dist, best_tour
 
 
 def get_node_from_redis(product_id):
@@ -83,11 +83,15 @@ def get_item_location(item_code):
 def get_present_distance(list_at_present):
     prev_node = 0
     total_dist = 0
+    path = [0]
+
     for node in list_at_present:
         total_dist += int(get_distance_between_two_nodes(prev_node, node))
         prev_node = node
+        path.append(node)
     total_dist += int(get_distance_between_two_nodes(prev_node, 0))
-    return total_dist
+    path.append(0)
+    return total_dist, path
 
 
 def parse_file():
@@ -162,8 +166,26 @@ class OrderList(View):
                     node = get_node_from_redis(product_id)
                     my_set.add(node)
                     list_at_present.append(node_at_present)
-                total_dist = apply_tsp(my_set)
-                dist_at_present = get_present_distance(list_at_present)
+                total_dist, best_tour = apply_tsp(my_set)
+                dist_at_present, current_tour = get_present_distance(list_at_present)
+                best_tour_coord = []
+                current_tour_coord = []
+                for node in best_tour:
+                    coord = []
+                    x,  y = two_dimension_from_single_node(node)
+                    coord.append(x)
+                    coord.append(y)
+                    best_tour_coord.append(coord)
+
+                for node in current_tour:
+                    coord = []
+                    x,  y = two_dimension_from_single_node(node)
+                    coord.append(x)
+                    coord.append(y)
+                    current_tour_coord.append(coord)
+
+                store_live_orders(order, best_tour, best_tour_coord, total_dist, current_tour, current_tour_coord,
+                                  dist_at_present)
 
                 crm_info_logger.info("total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
 
