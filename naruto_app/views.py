@@ -193,3 +193,6 @@ class OrderList(View):
             print e
 
         return HttpResponse(status=200)
+
+    def get(self, request):
+        return get_live_orders()
