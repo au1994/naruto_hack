@@ -10,7 +10,11 @@ crm_info_logger = logging.getLogger('crm_info_logger')
 
 def convert_location_into_node(location):
     l = location.split("-")
-    node_id = int(ord(l[1][0])-ord('A'))*360 + (int(l[1][1])-1)*40 + ((int(l[2])*2)-1) + int(ord(l[4])-ord('A'))+(int(l[3])-1)*1200
+    try:
+        node_id = int(ord(l[1][0])-ord('A'))*360 + (int(l[1][1])-1)*40 + ((int(l[2])*2)-1) + int(ord(l[4])-ord('A'))+(int(l[3])-1)*1200
+    except :
+        node_id = 5676
+
     return node_id
 
 
@@ -86,6 +90,43 @@ def get_present_distance(list_at_present):
     return total_dist
 
 
+def parse_file():
+    f = open('graph_input_final_all', "r")
+    f2 = open('result_final', 'w', 0)
+
+    for line in f:
+        words = line.split(" ")
+        print words
+        f2.write(words[0] + "," + words[1] + ',')
+        words.pop(0)
+        words.pop(0)
+        a, b = func(words)
+        print str(a) + str(b)
+        f2.write(str(a) + "," + str(b))
+        f2.write('\n')
+
+    f2.close()
+    return
+
+
+def func(items):
+    my_set = set([])
+    list_at_present = []
+    for item in items:
+        product_id = item
+        item_code = get_item_code(product_id)
+        location = get_item_location(item_code)
+        node_at_present = convert_location_into_node(location)
+        node = get_node_from_redis(product_id)
+        my_set.add(node)
+        list_at_present.append(node_at_present)
+    total_dist = apply_tsp(my_set)
+    dist_at_present = get_present_distance(list_at_present)
+    crm_info_logger.info("total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
+    return total_dist, dist_at_present
+
+
+
 class OrderList(View):
 
     @csrf_exempt
@@ -109,7 +150,7 @@ class OrderList(View):
                     list_at_present.append(node_at_present)
                 total_dist = apply_tsp(my_set)
                 dist_at_present = get_present_distance(list_at_present)
-                crm_info_logger.info("order:" + str(order) + "total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
+                crm_info_logger.info("total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
 
         except Exception as e:
             print e
