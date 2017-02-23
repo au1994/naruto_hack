@@ -36,3 +36,28 @@ def get_distance_between_two_nodes(i, j):
     return r.lindex(key, l-j-1)
 
 
+def store_live_orders(order_id, best_tour, best_tour_coord, best_dist, current_tour, current_tour_coord, current_dist, ):
+    prefix = 'new_order'
+    key = prefix
+    r.lpush(key, order_id)
+    tmp_dict = {
+        'best_tour': best_tour,
+        'best_dist': best_dist,
+        'best_tour_coord': best_tour_coord,
+        'current_tour': current_tour,
+        'current_dist': current_dist,
+        'current_tour_coord': current_tour_coord
+    }
+    tmp_dict = json.dumps(tmp_dict)
+    r.set(str(order_id), tmp_dict)
+
+
+def get_live_orders():
+    prefix = 'new_order'
+    key = prefix
+    order_id = r.lindex(prefix, 0)
+    tmp_dict = r.get(str(order_id))
+    return tmp_dict
+
+
+
