@@ -70,6 +70,3 @@ def get_live_orders():
         return json.dumps(x)
     tmp_dict = r.get(str(order_id))
     return tmp_dict
-
-
-
