@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 import requests
 from naruto_redis_store import *
+import json
 
 crm_info_logger = logging.getLogger('crm_info_logger')
 
@@ -152,6 +153,9 @@ class OrderList(View):
 
         try:
             body = request.body
+            print body
+            body = json.loads(body)
+            print 1111
             crm_info_logger.info(str(body))
             order = body.get('order_id')
             if body.get('order', {}).get('actual_merchant', {}).get('id') == 25811:
@@ -190,9 +194,10 @@ class OrderList(View):
                 crm_info_logger.info("total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
 
         except Exception as e:
+            print "in exception"
             print e
 
-        return HttpResponse(status=200)
+        return HttpResponse("done", status=200)
 
     def get(self, request):
         return HttpResponse(get_live_orders(), status=200)
