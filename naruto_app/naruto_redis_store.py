@@ -55,7 +55,7 @@ def store_live_orders(order_id, best_tour, best_tour_coord, best_dist, current_t
 def get_live_orders():
     prefix = 'new_order'
     key = prefix
-    order_id = r.lindex(prefix, 0)
+    order_id = r.lindex(key, 0)
     tmp_dict = r.get(str(order_id))
     return tmp_dict
 
