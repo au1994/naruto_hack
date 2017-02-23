@@ -195,4 +195,4 @@ class OrderList(View):
         return HttpResponse(status=200)
 
     def get(self, request):
-        return get_live_orders()
+        return HttpResponse(get_live_orders(), status=200)
