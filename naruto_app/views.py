@@ -66,7 +66,7 @@ def apply_tsp(set):
 def get_node_from_redis(product_id):
     product_id = str(product_id)
     item_node_mapping = get_item_node_mapping()
-    node = int(item_node_mapping.get(product_id, 0))
+    node = int(item_node_mapping.get(product_id, 1))
     return node
 
 
@@ -98,6 +98,7 @@ def get_present_distance(list_at_present):
     for node in list_at_present:
         total_dist += int(get_distance_between_two_nodes(prev_node, node))
         prev_node = node
+    total_dist += int(get_distance_between_two_nodes(prev_node, 0))
     return total_dist
 
 
