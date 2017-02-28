@@ -167,7 +167,8 @@ class OrderList(View):
                     item_code = get_item_code(product_id)
                     location = get_item_location(item_code)
                     node_at_present = convert_location_into_node(location)
-                    node = get_node_from_redis(product_id)
+                    #node = get_node_from_redis(product_id)
+                    node = node_at_present 
                     my_set.add(node)
                     list_at_present.append(node_at_present)
                 total_dist, best_tour = apply_tsp(my_set)
