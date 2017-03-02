@@ -36,7 +36,8 @@ def get_distance_between_two_nodes(i, j):
     return r.lindex(key, l-j-1)
 
 
-def store_live_orders(order_id, best_tour, best_tour_coord, best_dist, current_tour, current_tour_coord, current_dist):
+def store_live_orders(order_id, best_tour, best_tour_coord, best_dist, current_tour, current_tour_coord, current_dist, best_tour_without_placement, best_tour_coord_without_placement,
+                                  total_dist_without_placement):
     prefix = 'new_order'
     key = prefix
     r.lpush(key, order_id)
@@ -47,7 +48,10 @@ def store_live_orders(order_id, best_tour, best_tour_coord, best_dist, current_t
         'best_tour_coord': best_tour_coord,
         'current_tour': current_tour,
         'current_dist': current_dist,
-        'current_tour_coord': current_tour_coord
+        'current_tour_coord': current_tour_coord,
+        'best_tour_without_placement': best_tour_without_placement,
+        'best_tour_coord_without_placement': best_tour_coord_without_placement,
+        'total_dist_without_placement': total_dist_without_placement
     }
     tmp_dict = json.dumps(tmp_dict)
     r.set(str(order_id), tmp_dict)
@@ -65,7 +69,10 @@ def get_live_orders():
             'best_tour_coord': [],
             'current_tour': [],
             'current_dist': 0,
-            'current_tour_coord': []
+            'current_tour_coord': [],
+            'best_tour_without_placement': [],
+            'best_tour_coord_without_placement': [],
+            'total_dist_without_placement': 0
         }
         return json.dumps(x)
     tmp_dict = r.get(str(order_id))

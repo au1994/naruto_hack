@@ -162,18 +162,23 @@ class OrderList(View):
                 items = body.get('order').get('items')
                 my_set = set([])
                 list_at_present = []
+                list_without_placement = []
                 for item in items:
                     product_id = item.get("product_id")
                     item_code = get_item_code(product_id)
                     location = get_item_location(item_code)
                     node_at_present = convert_location_into_node(location)
                     node = get_node_from_redis(product_id)
+                    node_without_placement = node_at_present
                     my_set.add(node)
                     list_at_present.append(node_at_present)
+                    list_without_placement.append(node_without_placement)
                 total_dist, best_tour = apply_tsp(my_set)
                 dist_at_present, current_tour = get_present_distance(list_at_present)
+                total_dist_without_placement, best_tour_without_placement = apply_tsp(list_without_placement)
                 best_tour_coord = []
                 current_tour_coord = []
+                best_tour_coord_without_placement = []
                 for node in best_tour:
                     coord = []
                     x,  y = two_dimension_from_single_node(node)
@@ -188,8 +193,16 @@ class OrderList(View):
                     coord.append(y)
                     current_tour_coord.append(coord)
 
+                for node in best_tour_without_placement:
+                    coord = []
+                    x, y = two_dimension_from_single_node(node)
+                    coord.append(x)
+                    coord.append(y)
+                    best_tour_coord_without_placement.append(coord)
+
                 store_live_orders(order, best_tour, best_tour_coord, total_dist, current_tour, current_tour_coord,
-                                  dist_at_present)
+                                  dist_at_present, best_tour_without_placement, best_tour_coord_without_placement,
+                                  total_dist_without_placement)
 
                 crm_info_logger.info("total_dist: " + str(total_dist) + "dist_at_present" + str(dist_at_present))
 
